@@ -81,12 +81,16 @@ To install Ollama, follow these steps:
     First, run the development server:
 
     ```bash
+    # cd airtable
     # fastapi run main.py
     ```
 
     The application will now be running locally. Open your browser and go to:
 
     http://localhost:8000/client_example
+
+    http://localhost:8000/docs (API Document)
+
 
     You should now see the chat window where you can interact with the system and query candidates based on different skill sets.
 
@@ -103,3 +107,6 @@ To install Ollama, follow these steps:
         7. How many people who have Machine Learning certifications and list out the names?
         8. List out the skills and experience having by Shwetha Talapalli?
 
+## Screen Shots
+
+![alt text](image.png)
