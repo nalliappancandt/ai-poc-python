@@ -23,7 +23,7 @@ The stack includes:
 Before you begin, ensure you have the following prerequisites installed:
 
 - **Python3** (for running the Next.js application)
-- **Ollama** (for AI model interaction)
+- **Ollama + langchain** (for AI model interaction)
 - **Airtable API Key** (for accessing your Airtable database)
 
 ## Installing Ollama
