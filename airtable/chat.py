@@ -1,7 +1,8 @@
-from langchain_ollama import ChatOllama
+import langchain_ollama
 from langchain.agents import AgentExecutor
 from langchain.agents import create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_ollama import ChatOllama
 from pydantic import BaseModel
 
 from airtable import services
@@ -16,6 +17,11 @@ prompt = ChatPromptTemplate.from_messages([
     ("system", """
             Role: You are experienced staffing AI assistant to monitor airtable data and response queries.
             Task: Analyze the user query and call specific tool function and response summarized response based on function response.
+            Follow these instructions:-
+            If the user query asks for finding profiles based on rating, the call get_profiles_by_rating tool function.
+            If the user query asks for finding profiles based on certifications, the call get_profiles_by_certifications tool function.
+            If the user query asks for finding profiles based on skills, the call get_profiles_by_skills tool function.
+            If the user query asks for finding profiles based on roles, the call get_profiles_by_roles tool function.
     """),
     ("human", "{input}"),
     MessagesPlaceholder(variable_name="agent_scratchpad"),
@@ -23,7 +29,14 @@ prompt = ChatPromptTemplate.from_messages([
 
 
 
-tools=[services.get_profiles_airtable, services.get_skills_by_name, services.get_roles_by_name, services.get_profiles_by_certifications]
+## YOUR FUNCTION CALLS HERE:-
+tools=[
+  services.get_profiles_airtable, 
+  services.get_skills_by_name, 
+  services.get_roles_by_name, 
+  services.get_profiles_by_certifications,
+  services.get_profiles_by_rating
+]
 
 # Construct the tool calling agent
 agent = create_tool_calling_agent(llm, tools, prompt)

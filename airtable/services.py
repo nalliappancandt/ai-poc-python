@@ -83,7 +83,9 @@ fields_keys = [
 api_url = "https://api.airtable.com/v0/"
 base_id = "appv8lU1KddWDrr1k"
 table_id = "tblU2sGlCYYTfPlTf"
-
+AIRTABLE_BASE_ID = "appv8lU1KddWDrr1k"
+AIRTABLE_TABLE_NAME = "Eng Skills"
+AIRTABLE_VIEW_NAME = "viwWb2stzzriLsYrN"
 
 
 def prepare_query(skill: str) -> list[str]:
@@ -222,6 +224,7 @@ def get_roles_by_name(name: str) -> List[str]:
 
     return process_http_request(query, 'roles')
 
+
 @tool
 def get_profiles_by_certifications(certificate: str) -> List[str]:
     """
@@ -243,4 +246,91 @@ def get_profiles_by_certifications(certificate: str) -> List[str]:
     return process_http_request(query, 'certifications')
 
 
+@tool
+def get_profiles_by_rating(rating: int) -> List[dict]:
+    """
+    Fetches profiles from Airtable filtered by rating
+    
+    Args:
+        rating (int): Minimum rating to filter by
+        
+    Returns:
+        List[dict]: List of profiles matching the rating criteria
+    """
+    # Create filter formula to get records where rating is greater than or equal to the specified rating
+    filter_formula = f"{{rating}} >= {rating}"
+    print(filter_formula)
+    # Build the URL with filter formula
+    base_url = f"https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{table_id}";
+    params = {
+        'filterByFormula': filter_formula,
+        "view": AIRTABLE_VIEW_NAME,
+        "sort[0][field]": "rating",
+        "sort[0][direction]": "asc"
+    }
+    url = f"{base_url}?{urllib.parse.urlencode(params)}"
+    print(url)
+    
+    # Process the request
+    response = process_http_request(url, 'skills')
+    
+    return response
+
 #print(call_airtable_api('Next.js', 0));
+
+
+# def get_records_from_view(view_name: str, min_rating: Optional[int] = None) -> List[Dict[str, Any]]:
+    """
+    Get records from a specific view with optional rating filter
+    
+    Args:
+        view_name (str): Name of the view (e.g., 'India', 'US')
+        min_rating (Optional[int]): Optional minimum rating filter (1-5)
+        
+    Returns:
+        List[Dict[str, Any]]: List of records from the specified view
+        
+    Raises:
+        requests.HTTPError: If the API request fails
+        ValueError: If min_rating is not between 1-5
+    """
+    try:
+        # Validate min_rating if provided
+        if min_rating is not None and (min_rating < 1 or min_rating > 5):
+            raise ValueError("min_rating must be between 1 and 5")
+        
+        # Build base URL with view parameter
+        url = f"https://api.airtable.com/v0/{BASE_ID}/{TABLE_NAME}"
+        params = {
+            'view': view_name
+        }
+        
+        # Add rating filter if specified
+        if min_rating is not None:
+            filter_formula = f"{{Rating}} >= {min_rating}"
+            params['filterByFormula'] = filter_formula
+        
+        # Set up headers
+        headers = {
+            'Authorization': f'Bearer {AIRTABLE_API_KEY}',
+            'Content-Type': 'application/json'
+        }
+        
+        # Make API request
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()  # Raises HTTPError for bad responses
+        
+        data = response.json()
+        return data.get('records', [])
+        
+    except requests.HTTPError as e:
+        print(f"HTTP error occurred: {e}")
+        print(f"Response status: {response.status_code}")
+        print(f"Response text: {response.text}")
+        raise
+    except Exception as e:
+        print(f"Error getting records from view: {e}")
+        raise
+
+
+

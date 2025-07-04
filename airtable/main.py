@@ -112,7 +112,7 @@ async def client_example():
             
             async function testStream() {
                 const query = document.getElementById('query').value;
-                const modelName = document.getElementById('model-select').value;
+                const modelName = 'llama2'; //document.getElementById('model-select').value;
                 const resultDiv = document.getElementById('result');
                 const statusDiv = document.getElementById('status');
                 
@@ -128,7 +128,7 @@ async def client_example():
                         body: JSON.stringify({
                             query: query,
                             streaming: true,
-                            model: modelName,
+                            model: "llama",
                             history: []
                         })
                     });
@@ -183,7 +183,7 @@ async def client_example():
         <style>
             body { font-family: Arial, sans-serif; margin: 20px; }
             .container { max-width: 800px; margin: 0 auto; }
-            .controls { margin-bottom: 20px; }
+            .controls { margin-bottom: 20px; display: flex; }
             .action { color: #2c5282; margin: 10px 0; background: #ebf8ff; padding: 5px; border-radius: 4px; }
             .finish { font-weight: bold; margin-top: 10px; }
             .error { color: #c53030; background: #fff5f5; padding: 5px; border-radius: 4px; }
@@ -199,10 +199,7 @@ async def client_example():
         <div class="container">
             <h1>Query Airtable Profiles</h1>
             <div class="controls">
-                <input type="text" id="query" placeholder="Enter your query" style="width: 300px;">
-                <select id="model-select">
-                    <!-- Will be populated dynamically -->
-                </select>
+                <input autocomplete="off" type="text" id="query" placeholder="Enter your query" style="width: 100%;">
                 <button onclick="testStream()">Submit</button>
             </div>
             <div id="status">Ready</div>

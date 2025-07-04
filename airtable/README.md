@@ -106,6 +106,7 @@ To install Ollama, follow these steps:
         6. How many people who have Salesforce certifications and list out the names?
         7. How many people who have Machine Learning certifications and list out the names?
         8. List out the skills and experience having by Shwetha Talapalli?
+        9. Find the people who have react.js skill with rating more than 3
 
 ## Screen Shots
 
